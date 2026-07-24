@@ -24,11 +24,11 @@
         </label>
         <label>
             Converter <b>para</b>
-            <select>
-                <option>US$ Dólar americano</option>
-                <option>€ Euro</option>
-                <option>₿ Bitcoin</option>
-                <option>£ Libra</option>
+            <select class="currency-select">
+                <option value="dolar">US$ Dólar americano</option>
+                <option value="euro">€ Euro</option>
+              <!--  <option value="btc">₿ Bitcoin</option> -->
+                <!--<option value="libra">£ Libra</option>-->
             </select>
         </label>
         <label>
@@ -47,27 +47,27 @@
             </div>
             <img class="arrow-img" src="./assets/Arrow.png" alt="seta">
             <div class="currency-box">
-                <img src="./assets/dolar americano 1.png" alt="moeda-convertida">
-                <p class="currency">US$ Dólar Americano</p>
+                <img class="currency-img" src="./assets/dolar americano 1.png" alt="moeda-convertida">
+                <p class="currency" id="currency-name">US$ Dólar Americano</p>
                 <p class="currency-value">0,00</p>
             </div>
 
-           <!-- <div>
+         <!-- <div>
                 <img src="./assets/Euro1.png" alt="moeda-convertida">
-                <p>€ Euro</p>
-                <p>0,00</p>
+                <p class="currency" >€ Euro</p>
+                <p class="currency-value">0,00</p>
             </div>
 
-            <div>
+           <div>
                 <img src="./assets/bitcoin 1.png" alt="moeda-convertida">
-                <p>₿ Bitcoin</p>
-                <p>0,00</p>
+                <p class="currency">₿ Bitcoin</p>
+                <p class="currency-value">0,00</p>
             </div>
 
             <div>
                 <img src="./assets/libra 1.png" alt="moeda-convertida">
-                <p>£ Libra</p>
-                <p>0,00</p>
+                <p class="currency">£ Libra</p>
+                <p class="currency-value">0,00</p>
             </div> -->
         </section>
     </main>

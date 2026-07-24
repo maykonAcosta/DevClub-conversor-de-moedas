@@ -10,7 +10,7 @@ body {
 }
 
 main {
-    width: 374px;
+    width: 440px;
     border-radius: 20px;
     background-color: #f4f4f4ff;
     margin: 0 auto 40px;
@@ -28,7 +28,7 @@ main {
 label {
     color: #777777;
     font-weight: 400;
-    font-size: 14px;
+    font-size: 20px;
 }
 
 select,
@@ -41,7 +41,7 @@ input {
     margin-bottom: 24px;
     padding-left: 18px;
     font-weight: 700px;
-    font-size: 18px;
+    font-size: 20px;
     color: #555555;
 }
 
