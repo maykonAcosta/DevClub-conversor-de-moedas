@@ -19,8 +19,8 @@ main {
 }
 
 .logo {
-    height: 300px;
-    width: 300px;
+    height: 290px;
+    width: 290px;
     display: block;
     margin: 20px auto;
 }
@@ -54,7 +54,7 @@ button {
     height: 48px;
     width: 100%;
     font-weight: 700;
-    font-size: 19px;
+    font-size: 25px;
 }
 
 button:hover {
@@ -92,7 +92,7 @@ section {
 }
 
 .currency {
-    font-size: 16px;
+    font-size: 22px;
     color: #777777;
 }
 
@@ -100,4 +100,11 @@ section {
     font-size: 20px;
     font-weight: 700;
     color: #555555;
+}
+
+.cotacao-dia {
+    font-size: 14px;
+    color: #772fd3;
+    font-weight: 700;
+    margin: -14px 0 24px;
 }

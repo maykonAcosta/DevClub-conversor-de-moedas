@@ -1,35 +1,93 @@
 const convertbutton = document.querySelector(".convert-button");
 const currencyselect = document.querySelector(".currency-select");
 
+// guarda as cotações do dia depois de buscar na API
+const cotacoes = {
+   dolar: null,
+   euro: null
+};
+
+// busca as cotações reais na AwesomeAPI (gratuita, sem chave)
+async function buscarCotacoes() {
+   try {
+      const resposta = await fetch("https://economia.awesomeapi.com.br/json/last/USD-BRL,EUR-BRL");
+      const dados = await resposta.json();
+
+      cotacoes.dolar = parseFloat(dados.USDBRL.bid);
+      cotacoes.euro = parseFloat(dados.EURBRL.bid);
+
+      console.log("Cotações atualizadas:", cotacoes);
+   } catch (erro) {
+      console.error("Não foi possível buscar a cotação do dia, usando valores padrão.", erro);
+      // valores de emergência caso a API esteja fora do ar
+      cotacoes.dolar = 5.2;
+      cotacoes.euro = 6.0;
+   }
+}
+
+
+// escreve na tela o valor de 1 unidade da moeda escolhida em Reais
+//function mostrarCotacaoDoDia() {
+  // const cotacaoTexto = document.querySelector(".cotacao-dia");
+
+  // if (cotacoes.dolar === null || cotacoes.euro === null) {
+     // cotacaoTexto.innerHTML = "Buscando cotação do dia...";
+     // return;
+  // }
+
+  // const valorEmReais = currencyselect.value == "euro" ? cotacoes.euro : cotacoes.dolar;
+   //const siglaMoeda = currencyselect.value == "euro" ? "EUR" : "USD";
+
+   //const valorFormatado = new Intl.NumberFormat("pt-BR", {
+      //style: "currency",
+      //currency: "BRL"
+   //}).format(valorEmReais);
+
+   //cotacaoTexto.innerHTML = `1 ${siglaMoeda} = ${valorFormatado}`;
+//}
+
 function convertvalues() {
    const currencyinputvalue = document.querySelector(".currency-input").value;
    const currencyvaluetoconvert = document.querySelector(".currency-value-to-convert");
    const currencyvalueconverted = document.querySelector(".currency-value");
 
+   // se a cotação ainda não chegou da API, avisa e cancela
+   if (cotacoes.dolar === null || cotacoes.euro === null) {
+      alert("Aguarde, buscando a cotação do dia...");
+      return;
+   }
+
    console.log(currencyselect.value);
-   const dolartoday = 5.2;
-   const eurotoday = 6.0;
+   const dolartoday = cotacoes.dolar;
+   const eurotoday = cotacoes.euro;
+   let convertedvalue;
+
+
+   currencyvaluetoconvert.innerHTML = new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL"
+   }).format(currencyinputvalue);
+
 
 
    if (currencyselect.value == "dolar") {
-      currencyvaluetoconvert.innerHTML = new Intl.NumberFormat("en-US", {
+      convertedvalue = currencyinputvalue / dolartoday;
+      currencyvalueconverted.innerHTML = new Intl.NumberFormat("en-US", {
          style: "currency",
          currency: "USD"
-      }).format(currencyinputvalue);
-      convertedvalue = currencyinputvalue / dolartoday;
+      }).format(convertedvalue);
+      
    }
    if (currencyselect.value == "euro") {
-      currencyvaluetoconvert.innerHTML = new Intl.NumberFormat("de-DE", {
+      convertedvalue = currencyinputvalue / eurotoday;
+      currencyvalueconverted.innerHTML = new Intl.NumberFormat("de-DE", {
          style: "currency",
          currency: "EUR"
-      }).format(currencyinputvalue);
-      convertedvalue = currencyinputvalue / eurotoday;
+      }).format(convertedvalue);
+      
    }
 
-   currencyvalueconverted.innerHTML = new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL"
-   }).format(convertedvalue);
+
 }
 function changecurrency() {
    const currencyname = document.getElementById("currency-name");
@@ -51,3 +109,6 @@ function changecurrency() {
 
 currencyselect.addEventListener("change", changecurrency)
 convertbutton.addEventListener("click", convertvalues)
+
+buscarCotacoes();
+//mostrarCotacaoDoDia();
