@@ -4,17 +4,19 @@ const currencyselect = document.querySelector(".currency-select");
 // guarda as cotações do dia depois de buscar na API
 const cotacoes = {
    dolar: null,
-   euro: null
+   euro: null,
+   libra: null,
 };
 
 // busca as cotações reais na AwesomeAPI (gratuita, sem chave)
 async function buscarCotacoes() {
    try {
-      const resposta = await fetch("https://economia.awesomeapi.com.br/json/last/USD-BRL,EUR-BRL");
+      const resposta = await fetch("https://economia.awesomeapi.com.br/json/last/USD-BRL,EUR-BRL,GBP-BRL");
       const dados = await resposta.json();
 
       cotacoes.dolar = parseFloat(dados.USDBRL.bid);
       cotacoes.euro = parseFloat(dados.EURBRL.bid);
+      cotacoes.libratoday = parseFloat(dados.GBPBRL.bid); // valor da libra da API
 
       console.log("Cotações atualizadas:", cotacoes);
    } catch (erro) {
@@ -22,29 +24,30 @@ async function buscarCotacoes() {
       // valores de emergência caso a API esteja fora do ar
       cotacoes.dolar = 5.2;
       cotacoes.euro = 6.0;
+      cotacoes.libratoday = 7.0; // valor fixo da libra, pois a API não fornece
    }
 }
 
 
 // escreve na tela o valor de 1 unidade da moeda escolhida em Reais
-//function mostrarCotacaoDoDia() {
-  // const cotacaoTexto = document.querySelector(".cotacao-dia");
+function mostrarCotacaoDoDia() {
+   const cotacaoTexto = document.querySelector(".cotacao-dia");
 
-  // if (cotacoes.dolar === null || cotacoes.euro === null) {
-     // cotacaoTexto.innerHTML = "Buscando cotação do dia...";
-     // return;
-  // }
+   if (cotacoes.dolar === null || cotacoes.euro === null) {
+      cotacaoTexto.innerHTML = "Buscando cotação do dia...";
+      return;
+   }
 
-  // const valorEmReais = currencyselect.value == "euro" ? cotacoes.euro : cotacoes.dolar;
-   //const siglaMoeda = currencyselect.value == "euro" ? "EUR" : "USD";
+   const valorEmReais = currencyselect.value == "euro" ? cotacoes.euro : currencyselect.value == "libra" ? cotacoes.libratoday : cotacoes.dolar;
+   const siglaMoeda = currencyselect.value == "euro" ? "EUR" : currencyselect.value == "libra" ? "GBP" : "USD";
 
-   //const valorFormatado = new Intl.NumberFormat("pt-BR", {
-      //style: "currency",
-      //currency: "BRL"
-   //}).format(valorEmReais);
+   const valorFormatado = new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL"
+   }).format(valorEmReais);
 
-   //cotacaoTexto.innerHTML = `1 ${siglaMoeda} = ${valorFormatado}`;
-//}
+   cotacaoTexto.innerHTML = `1 ${siglaMoeda} = ${valorFormatado}`;
+}
 
 function convertvalues() {
    const currencyinputvalue = document.querySelector(".currency-input").value;
@@ -52,7 +55,7 @@ function convertvalues() {
    const currencyvalueconverted = document.querySelector(".currency-value");
 
    // se a cotação ainda não chegou da API, avisa e cancela
-   if (cotacoes.dolar === null || cotacoes.euro === null) {
+   if (cotacoes.dolar === null || cotacoes.euro === null || cotacoes.libratoday === null) {
       alert("Aguarde, buscando a cotação do dia...");
       return;
    }
@@ -60,6 +63,7 @@ function convertvalues() {
    console.log(currencyselect.value);
    const dolartoday = cotacoes.dolar;
    const eurotoday = cotacoes.euro;
+   const libratoday = cotacoes.libratoday; // valor fixo da libra, pois a API não fornece
    let convertedvalue;
 
 
@@ -87,6 +91,14 @@ function convertvalues() {
       
    }
 
+   if (currencyselect.value=="libra"){
+      convertedvalue = currencyinputvalue / libratoday;
+      currencyvalueconverted.innerHTML = new Intl.NumberFormat("en-GB", {
+         style: "currency",
+         currency: "GBP"
+      }).format(convertedvalue);
+   }
+
 
 }
 function changecurrency() {
@@ -103,6 +115,11 @@ function changecurrency() {
       currencyimg.src = "./assets/Euro1.png";
    }
 
+   if (currencyselect.value == "libra") {
+      currencyname.innerHTML = "£ Libra Esterlina";
+      currencyimg.src = "./assets/libra 1.png";
+   }
+
    convertvalues()
 }
 
@@ -111,4 +128,5 @@ currencyselect.addEventListener("change", changecurrency)
 convertbutton.addEventListener("click", convertvalues)
 
 buscarCotacoes();
-//mostrarCotacaoDoDia();
+mostrarCotacaoDoDia();
+console.log("Cotações iniciais:", cotacoes);
